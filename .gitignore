@@ -1,8 +1,34 @@
-HELP.md
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+
+#### CLIENT SIDE ####
+# dependencies
+/Client/loja-app/node_modules
+/Client/loja-app/target/
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+/build
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+#### SERVER SIDE ####
+
+### DIRETORIOS EXCLUIDOS ###
+/Server/.mvn
+/Server/src/test
+/Server/target/
 
 ### STS ###
 .apt_generated
@@ -31,3 +57,32 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### MVN ###
+/Server/.mnv
+mvnw
+mvnw.cmd
+
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
