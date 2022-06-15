@@ -2,7 +2,6 @@ package br.ucsal.loja.service;
 
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.ucsal.loja.exception.BusinessException;
 import br.ucsal.loja.model.Fornecedor;
-import br.ucsal.loja.model.Produto;
+import br.ucsal.loja.persistence.dao.FornecedorDAO;
 import br.ucsal.loja.persistence.dao.ProdutoDAO;
 import br.ucsal.loja.persistence.repository.FornecedorRepository;
 import br.ucsal.loja.persistence.repository.ProdutoRepository;
@@ -32,13 +31,23 @@ public class ProdutoService {
 	@Autowired
 	private ProdutoDAO produtoDAO;
 	
+	@Autowired
+	private FornecedorDAO fornecedorDAO;
+	
 	public List<ConsultaProdutoResponse> obterTodosProdutos() throws BusinessException {
-		return produtoDAO.obterProdutoPeloId(null); 
+		List<ConsultaProdutoResponse> consultas = produtoDAO.obterProdutoPeloId(null);
+		for(ConsultaProdutoResponse consulta : consultas) {
+			consulta.setFornecedores(fornecedorDAO.obterListaFornecedoresPeloIdProduto(consulta.getId()));
+		}
+		return consultas; 
 	}
 	
 	public ConsultaProdutoResponse obterProdutoPeloId(BigInteger id) throws BusinessException {
-		List<ConsultaProdutoResponse> resultados = produtoDAO.obterProdutoPeloId(id);
-		return resultados.get(0);
+		List<ConsultaProdutoResponse> consultas = produtoDAO.obterProdutoPeloId(id);
+		for(ConsultaProdutoResponse consulta : consultas) {
+			consulta.setFornecedores(fornecedorDAO.obterListaFornecedoresPeloIdProduto(consulta.getId()));
+		}
+		return consultas.get(0);
 	}
 	
 	private void verificarFornecedor(List<FornecedorTO> fornecedores) throws BusinessException {
@@ -57,6 +66,14 @@ public class ProdutoService {
 		for(FornecedorTO fornecedor : request.getFornecedores()) {
 			produtoDAO.relacionarProdutoFornecedor(idProduto, fornecedor);
 		}
+	}
+	
+	public List<ConsultaProdutoResponse> obterProdutosVendidos() throws BusinessException{
+		return produtoDAO.obterProdutosVendidos();
+	}
+	
+	public List<ConsultaProdutoResponse> obterProdutosVendidosPeloCpfCnpjCliente(String cpfCnpj) throws BusinessException {
+		return produtoDAO.obterProdutosVendidosPeloCpfCnpjCliente(cpfCnpj);
 	}
 
 }
